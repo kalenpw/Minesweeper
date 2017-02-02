@@ -45,30 +45,29 @@ public class Main extends Application {
     	int width = 10;
     	int height = 10;
     	int mineCount = 10;
-    	boolean[][] mineField = createMineField(width, height, mineCount);
+    	
+    	GameBoard game = new GameBoard(width, height, mineCount);
     	
     	GridPane gameBoard = new GridPane();
     	primaryStage.setTitle("MineSweeper");
     	//padding?
     	
-    	int boardWidth = 10;
-    	int boardHeight = 10;
     	
-    	for(int row = 0; row < mineField.length; row++){
-    		for(int col = 0; col < mineField[0].length; col++){
+    	for(int row = 0; row < game.mineField.length; row++){
+    		for(int col = 0; col < game.mineField[0].length; col++){
     			Button btn;
-    			if(mineField[col][row] == true){
-    				btn = new Button(debug(true));
+    			if(game.mineField[col][row].getHasMine()){
+    				btn = new Button(game.mineField[col][row].getHasMine() + "");
     				btn.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+
     			}
     			else{
-    				btn = new Button(String.valueOf(debug(false)));
+    				btn = new Button(game.mineField[col][row].getHasMine() + "");
     			}
     			btn.setOnAction((event) -> {
     			    buttonClicked(event);
     			});
     			gameBoard.add(btn, col, row);
-    	
     		}
     	}
     	
@@ -81,34 +80,11 @@ public class Main extends Application {
     	if(bool) return "True";
     	else return "false";
     }
-    
-    /*
-     * 
-     * 
-     */
-    private boolean[][] createMineField(int width, int height, int totalMines){
-    	boolean[][] returnArray = new boolean[width][height];
-    	Random rnd = new Random();
-    	int placedMines = 0;
-    	
-    	while(placedMines < totalMines){
-    		int x = randIntInRange(0, width - 1);
-    		int y = randIntInRange(0, height - 1);
-    		
-    		returnArray[x][y] = true;
-    		placedMines ++;	
-    	}
-    	return returnArray;
-    }
-    
-    private int randIntInRange(int min, int max){
-    	Random rnd = new Random();
-    	return rnd.nextInt((max - min) + 1);
-    }
-    
+      
+ 
     
     public void buttonClicked(ActionEvent event){
-    	System.out.println("Hello fuck face");
+    	System.out.println("Test ");
     	Button clicked = (Button) event.getSource();
     	clicked.setText("Clicked");
     	clicked.setDisable(true);
