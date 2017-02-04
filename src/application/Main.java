@@ -45,10 +45,11 @@ public class Main extends Application {
     	int width = 10;
     	int height = 10;
     	int mineCount = 10;
+    	Stage stage = primaryStage;
     	
     	GameBoard game = new GameBoard(width, height, mineCount);
     	
-    	GridPane gameBoard = new GridPane();
+    	GridPane grid = new GridPane();
     	primaryStage.setTitle("MineSweeper");
     	//padding?
     	
@@ -57,21 +58,22 @@ public class Main extends Application {
     		for(int col = 0; col < game.mineField[0].length; col++){
     			Button btn;
     			if(game.mineField[col][row].getHasMine()){
-    				btn = new Button(game.mineField[col][row].getHasMine() + "");
+    				//btn = new Button(game.mineField[col][row].getNeighborCount()+ "");
+    				btn = new Button(" ");
     				btn.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
     			}
     			else{
-    				btn = new Button(game.mineField[col][row].getHasMine() + "");
+    				btn = new Button(" ");
     			}
     			btn.setOnAction((event) -> {
-    			    buttonClicked(event);
+    			    buttonClicked(event, game, stage);
     			});
-    			gameBoard.add(btn, col, row);
+    			grid.add(btn, col, row);
     		}
     	}
     	
-    	Scene scene = new Scene(gameBoard);
+    	Scene scene = new Scene(grid);
     	primaryStage.setScene(scene);
     	primaryStage.show();
     }
@@ -83,11 +85,25 @@ public class Main extends Application {
       
  
     
-    public void buttonClicked(ActionEvent event){
+    public void buttonClicked(ActionEvent event, GameBoard game, Stage stage){
     	System.out.println("Test ");
     	Button clicked = (Button) event.getSource();
-    	clicked.setText("Clicked");
-    	clicked.setDisable(true);
+    	int row = GridPane.getRowIndex(clicked);
+    	int col = GridPane.getColumnIndex(clicked);
+    	if(game.mineField[col][row].getHasMine()){
+    		createPopUp(stage);
+    	}
+    	else{
+    		int mines = game.mineField[col][row].getNeighborCount();
+    		clicked.setText(mines + "");
+        	clicked.setDisable(true);
+    	}
+    	
+    }
+    
+    public void createPopUp(Stage stage){
+    	Popup test = new Popup();
+    	test.start(stage);
     }
 
 }
